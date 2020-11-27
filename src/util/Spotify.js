@@ -28,7 +28,6 @@ export const Spotify = {
 
     async search(term) {
         const accessToken = Spotify.getAccessToken();
-        console.log('hi')
         
         const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
             headers: {
@@ -57,20 +56,32 @@ export const Spotify = {
         const headers = {Authorization: `Bearer ${accessToken}`};
         let userId;
 
-        let response = await fetch('https://api.spotify.com/v1/me', {headers: headers});
-        let jsonResponse = await response.json();
-        userId = jsonResponse.id;
-        response = await fetch(`/v1/users/${userId}/playlists`, {
-            headers: headers,
-            method: 'POST',
-            body: JSON.stringify({name: name})
+        const response = await fetch('https://api.spotify.com/v1/me', {
+            headers: headers
         });
-        jsonResponse = await response.json();
-        const playlistID = jsonResponse.id;
-        return fetch(`/v1/users/${userId}/playlists/${playlistID}/tracks`, {
+        if (response.ok) {
+            return response.json();
+        }
+        const jsonResponse = undefined;
+        userId = jsonResponse.id;
+        const response_1 = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
             headers: headers,
             method: 'POST',
-            body: JSON.stringify({uris: trackURIs})
-        })
+            body: JSON.stringify({ name: name })
+        });
+        if (response_1.ok) {
+            return response_1.json();
+        } else {
+            console.log('API request failed');
+        }
+        const jsonResponse_1 = undefined;
+        const playlistId = jsonResponse_1.id;
+        return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
+            headers: headers,
+            method: 'POST',
+            body: JSON.stringify({ uris: trackURIs })
+        });
+
+        
     }
 };
