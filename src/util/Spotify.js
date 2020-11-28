@@ -1,5 +1,5 @@
 const ClientID = '5f677065c3b24845a5ce6bce4d21d295';
-const redirectUri = "http://localhost:3000";
+const redirectUri = "http://incompetent-skate.surge.sh";
 
 let accessToken;
 
